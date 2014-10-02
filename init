@@ -27,5 +27,5 @@ fi
 git --bare init -q ${HOME}/${REPONAME}
 if [ $? = 0 ]; then
         echo "Success!"
-        echo "Your Remote Repository: git@${HOSTNAME}:${REPONAME}"
+        echo "Your Remote Repository: ${LOGNAME}@${HOSTNAME}:${REPONAME}"
 fi
