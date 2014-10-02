@@ -1,0 +1,24 @@
+#!/bin/sh
+# Remove a git repository whose name ends with ".git".
+
+if [ $# -ne 1 ];  then
+        echo "Error: invalid arguments"
+        echo
+        echo "Usage: remove <git repository name without '.git'>"
+        exit;
+fi
+REPONAME=$1.git
+if [ "$(git --git-dir="${HOME}/${REPONAME}" rev-parse --is-bare-repository 2> /dev/null)" != true ]; then
+        echo "${REPONAME} is not git bare repository."
+        exit;
+fi
+while true; do
+        read -p "Do you wish to remove repository? (y/n) " yn
+        case $yn in
+                [Yy]) break;;
+                [Nn]) exit;;
+                *) echo "Please answer y or n";;
+        esac
+done
+rm -rf ${HOME}/${REPONAME}
+echo "Repository deleted successfull.";

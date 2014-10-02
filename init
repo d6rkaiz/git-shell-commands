@@ -1,0 +1,31 @@
+#!/bin/sh
+# Create an empty git bare repository or reinitialize an existing one.
+
+HOSTNAME=`hostname -f`
+
+if [ $# -ne 1 ];  then
+        echo "Error: invalid arguments"
+        echo
+        echo "Usage: init <git repository name without '.git'>"
+        exit;
+fi
+REPONAME=$1.git
+if [ "$(git --git-dir="${HOME}/${REPONAME}" rev-parse --is-bare-repository 2> /dev/null)" = true ]; then
+        echo "${REPONAME} is already exist."
+        while true; do
+                read -p "Do you wish to reinitialize existing repository? (y/n) " yn
+                case $yn in
+                        [Yy]) break;;
+                        [Nn]) exit;;
+                        *) echo "Please answer y or n";;
+                esac
+        done
+elif [ -e ${HOME}/${REPONAME} ]; then
+        echo "${REPONAME} is already exist and git repository is not."
+        exit;
+fi
+git --bare init -q ${HOME}/${REPONAME}
+if [ $? = 0 ]; then
+        echo "Success!"
+        echo "Your Remote Repository: git@${HOSTNAME}:${REPONAME}"
+fi
